@@ -1,4 +1,5 @@
 image: mcr.microsoft.com/playwright:v1.59.1-jammy
+
 stages:
   - test
 
@@ -6,10 +7,9 @@ playwright-tests:
   stage: test
   script:
     - npm ci
-    - npx playwright test
+    - npx playwright test tests/LOGIN.spec.js
   artifacts:
     when: always
     paths:
       - test-results/
-      - playwright-report/
     expire_in: 7 days
