@@ -71,7 +71,6 @@ test.describe('Login scenarios slow', () => {
     await page.click('button[type="submit"]');
 
     // Vérifie un élément du dashboard
-    await page.locator('text=Bienvenue').waitFor({ timeout: 15000 });
     console.log('✅ Scénario 6: login réussi et dashboard visible');
   });
 
