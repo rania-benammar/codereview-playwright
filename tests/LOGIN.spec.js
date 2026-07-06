@@ -6,9 +6,9 @@ const VALID_PASS = '1234566';
 
 async function launchBrowser() {
   const browser = await chromium.launch({
-    headless: false,   
-    slowMo: 600        
-  });
+  headless: !!process.env.CI,
+  slowMo: process.env.CI ? 0 : 600,
+});
 
   const page = await browser.newPage();
   return { browser, page };

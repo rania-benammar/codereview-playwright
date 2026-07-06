@@ -12,4 +12,5 @@ playwright-tests:
     when: always
     paths:
       - test-results/
+      - screenshots/
     expire_in: 7 days
