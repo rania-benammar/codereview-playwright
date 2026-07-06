@@ -1,77 +1,127 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, chromium } from '@playwright/test';
 
 const URL = 'https://app-uat.codereview.allence.cloud/auth/login';
 const VALID_EMAIL = 'raniabenammar491@gmail.com';
-const VALID_PASS = '123456';
+const VALID_PASS = '1234566';
 
-test.describe('Login scenarios slow', () => {
+async function launchBrowser() {
+  const browser = await chromium.launch({
+    headless: false,   
+    slowMo: 600        
+  });
 
-  // SCÉNARIO 1 : Email vide + mot de passe valide
-  test('Scénario 1 : Email vide, mot de passe valide', async ({ page }) => {
-    await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
+  const page = await browser.newPage();
+  return { browser, page };
+}
+
+test.describe('Login scenarios visible slow', () => {
+
+  test('Scénario 1 : Email vide, mot de passe valide', async () => {
+    const { browser, page } = await launchBrowser();
+
+    await page.goto(URL, { waitUntil: 'networkidle' });
     await page.fill('input[type="email"]', '');
-    await page.waitForTimeout(300);
     await page.fill('input[type="password"]', VALID_PASS);
-    await page.waitForTimeout(300);
     await page.click('button[type="submit"]');
-    await page.waitForTimeout(500);
+
+await page.screenshot({
+  path: 'screenshots/scenario1.png',
+  fullPage: true,
+});
+    await page.waitForTimeout(2000);
+
+    await browser.close();
   });
 
-  // SCÉNARIO 2 : Email valide + mot de passe vide
-  test('Scénario 2 : Email valide, mot de passe vide', async ({ page }) => {
-    await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
+  test('Scénario 2 : Email valide, mot de passe vide', async () => {
+    const { browser, page } = await launchBrowser();
+
+    await page.goto(URL, { waitUntil: 'networkidle' });
     await page.fill('input[type="email"]', VALID_EMAIL);
-    await page.waitForTimeout(300);
     await page.fill('input[type="password"]', '');
-    await page.waitForTimeout(300);
     await page.click('button[type="submit"]');
-    await page.waitForTimeout(500);
+
+    await page.screenshot({
+  path: 'screenshots/scenario2.png',
+  fullPage: true,
+});
+
+    await page.waitForTimeout(2000);
+
+    await browser.close();
   });
 
-  // SCÉNARIO 3 : Email incorrect + mot de passe valide
-  test('Scénario 3 : Email incorrect, mot de passe valide', async ({ page }) => {
-    await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
-    await page.fill('input[type="email"]', 'wrongemail@test.com');
-    await page.waitForTimeout(300);
+  test('Scénario 3 : Email incorrect, mot de passe valide', async () => {
+    const { browser, page } = await launchBrowser();
+
+    await page.goto(URL, { waitUntil: 'networkidle' });
+    await page.fill('input[type="email"]', 'raniabenammar@gmail.com');
     await page.fill('input[type="password"]', VALID_PASS);
-    await page.waitForTimeout(300);
     await page.click('button[type="submit"]');
-    await page.waitForTimeout(500);
+    await page.screenshot({
+  path: 'screenshots/scenario3.png',
+  fullPage: true,
+});
+
+    await page.waitForTimeout(2000);
+
+    await browser.close();
   });
 
-  // SCÉNARIO 4 : Email valide + mot de passe incorrect
-  test('Scénario 4 : Email valide, mot de passe incorrect', async ({ page }) => {
-    await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
+  test('Scénario 4 : Email valide, mot de passe incorrect', async () => {
+    const { browser, page } = await launchBrowser();
+
+    await page.goto(URL, { waitUntil: 'networkidle' });
     await page.fill('input[type="email"]', VALID_EMAIL);
-    await page.waitForTimeout(300);
     await page.fill('input[type="password"]', 'wrongpass');
-    await page.waitForTimeout(300);
     await page.click('button[type="submit"]');
-    await page.waitForTimeout(500);
+
+    await page.screenshot({
+  path: 'screenshots/scenario4.png',
+  fullPage: true,
+});
+
+    await page.waitForTimeout(2000);
+
+    await browser.close();
   });
 
-  // SCÉNARIO 5 : Email vide + mot de passe vide
-  test('Scénario 5 : Email vide et mot de passe vide', async ({ page }) => {
-    await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
+  test('Scénario 5 : Email vide et mot de passe vide', async () => {
+    const { browser, page } = await launchBrowser();
+
+    await page.goto(URL, { waitUntil: 'networkidle' });
     await page.fill('input[type="email"]', '');
-    await page.waitForTimeout(300);
     await page.fill('input[type="password"]', '');
-    await page.waitForTimeout(300);
-    await page.click('button[type="submit"]');
-    await page.waitForTimeout(500);
-  });
-
-  // SCÉNARIO 6 : Email et mot de passe valides
-  test('Scénario 6 : Email et mot de passe valides', async ({ page }) => {
-    await page.goto(URL, { waitUntil: 'networkidle', timeout: 60000 });
-    await page.fill('input[type="email"]', VALID_EMAIL);
-    await page.waitForTimeout(300);
-    await page.fill('input[type="password"]', VALID_PASS);
-    await page.waitForTimeout(300);
     await page.click('button[type="submit"]');
 
-    // Vérifie un élément du dashboard
-    console.log('✅ Scénario 6: login réussi et dashboard visible');
+    await page.screenshot({
+  path: 'screenshots/scenario5.png',
+  fullPage: true,
+});
+
+    await page.waitForTimeout(2000);
+
+    await browser.close();
   });
+
+  test('Scénario 6 : login valide', async ({ page }) => {
+
+  await page.goto(URL);
+
+  await page.fill('input[type="email"]', VALID_EMAIL);
+  await page.fill('input[type="password"]', VALID_PASS);
+
+  await page.click('button[type="submit"]');
+
+  await page.screenshot({
+  path: 'screenshots/scenario6.png',
+  fullPage: true,
+});
+
+  await page.waitForLoadState('networkidle');
+
+
+  await page.waitForTimeout(10000); // juste pour voir le dashboard
+});
 
 });
