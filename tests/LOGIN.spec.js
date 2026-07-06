@@ -7,7 +7,7 @@ const VALID_PASS = '1234566';
 async function launchBrowser() {
   const browser = await chromium.launch({
   headless: !!process.env.CI,
-  slowMo: process.env.CI ? 0 : 600,
+  slowMo: process.env.CI ? 0 : 1000,
 });
 
   const page = await browser.newPage();
@@ -63,7 +63,7 @@ await page.screenshot({
   fullPage: true,
 });
 
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(5000);
 
     await browser.close();
   });
@@ -81,8 +81,7 @@ await page.screenshot({
   fullPage: true,
 });
 
-    await page.waitForTimeout(2000);
-
+    await page.waitForTimeout(5000);
     await browser.close();
   });
 
@@ -104,9 +103,11 @@ await page.screenshot({
     await browser.close();
   });
 
-  test('Scénario 6 : login valide', async ({ page }) => {
+  test('Scénario 6 : login valide', async () => {
 
-  await page.goto(URL);
+    const { browser, page } = await launchBrowser();
+
+    await page.goto(URL, { waitUntil: 'networkidle' });
 
   await page.fill('input[type="email"]', VALID_EMAIL);
   await page.fill('input[type="password"]', VALID_PASS);
@@ -120,8 +121,7 @@ await page.screenshot({
 
   await page.waitForLoadState('networkidle');
 
-
-  await page.waitForTimeout(10000); // juste pour voir le dashboard
+  await page.waitForTimeout(20000); // juste pour voir le dashboard
 });
 
 });
