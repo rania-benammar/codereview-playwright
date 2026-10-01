@@ -2,7 +2,7 @@ import { test, expect, chromium } from '@playwright/test';
 
 const URL = 'https://app-uat.codereview.allence.cloud/auth/login';
 const VALID_EMAIL = 'raniabenammar491@gmail.com';
-const VALID_PASS = '1234566';
+const VALID_PASS = '123456';
 
 async function launchBrowser() {
   const browser = await chromium.launch({
